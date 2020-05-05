@@ -73,24 +73,18 @@
   function learnify() {
     console.log("learnify");
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        chrome.tabs.query(
-          { active: true, currentWindow: true },
-          async function (tabs) {
-            let url = tabs[0].url;
+        let { url } = await getActiveTab();
 
-            if (url.includes("azure")) {
-              await hideAzureInfo();
-            } else if (url.includes("github")) {
-              await hideGitHubInfo();
-            }
+        if (url.includes("azure")) {
+          await hideAzureInfo();
+        } else if (url.includes("github")) {
+          await hideGitHubInfo();
+        }
 
-            // defer microtask
-            setTimeout(() => resolve(), 10);
-          }
-        );
-      } catch (error) {
+        // defer microtask
+        setTimeout(() => resolve(), 10);      } catch (error) {
         reject(error);
       }
     });
@@ -103,9 +97,10 @@
       if (document.querySelector("#XYZ")) return;
 
       let parent = document.body;
-      let scrollY = document.querySelector(
+      let azureScrollContainer = document.querySelector(
         ".fxs-blade-content-wrapper:not(.fxs-menu-show-search)"
-      ).scrollTop;
+      );
+      let scrollY = azureScrollContainer ? azureScrollContainer.scrollTop : 0;
       let div = document.createElement("div");
       div.id = "XYZ";
       div.style.cssText = `
@@ -118,11 +113,13 @@
       z-index: 9999999;`;
       div.appendChild(parent.cloneNode(true));
       parent.appendChild(div);
-      document
-        .querySelector("#XYZ")
-        .querySelector(
-          ".fxs-blade-content-wrapper:not(.fxs-menu-show-search)"
-        ).scrollTop = scrollY;
+      if (azureScrollContainer) {
+        document
+          .querySelector("#XYZ")
+          .querySelector(
+            ".fxs-blade-content-wrapper:not(.fxs-menu-show-search)"
+          ).scrollTop = scrollY;
+      }
     };
     return await exec(code);
   }
@@ -191,30 +188,23 @@
   }
 
   async function hideGitHubInfo() {
-    if (shouldAnonymize === false) return;
-
     let code = function () {
       let avatarSrc =
         "https://avatars3.githubusercontent.com/u/62345156?s=460&u=885c79b21d3f01e7d2caff6d721aff9c304257c4&v=4";
       let ghUsername = "staticwebdev";
       let $ = (s) => document.querySelector(s) || document.createElement("i");
-      [...document.querySelectorAll(".ghh-user-x, .avatar")].map((el) => {
-        if (el.nodeName === "IMG") {
-          el.src = avatarSrc;
-        } else {
-          if (el.id === "repository-owner") {
-            el.innerHTML =
-              '<img alt="@' +
-              ghUsername +
-              '" width="20" height="20" src="' +
-              avatarSrc +
-              '" class="avatar avatar-user mr-1 ghh-user-x tooltipstered" style="box-shadow: transparent 0px 0px;"> ' +
-              ghUsername +
-              " ";
-          } else {
-            el.innerText = ghUsername;
-          }
-        }
+      [...document.querySelectorAll(".commit-form-avatar img, a.u-photo img, a.avatar-user > img")].map((el) => {
+        el.src = avatarSrc;
+      });
+      [...document.querySelectorAll("a.author, a.commit-author, a[rel='author']")].map((el) => {
+        el.innerText = ghUsername;
+      });
+      [...document.querySelectorAll("#sponsorships-profile-button, .js-profile-editable-area, div.mt-3, div.border-top.py-3.clearfix.hide-sm.hide-md")].map(el => {
+        el.style.cssText = `display: none !important;`;
+      });
+      [...document.querySelectorAll("h1.vcard-names")].map((el) => {
+        el.innerHTML = `
+        <span class="p-nickname vcard-username d-block" itemprop="additionalName">`+ghUsername+`</span>`;
       });
     };
     return await exec(code);
@@ -235,7 +225,7 @@
     console.log("capture screenshot");
 
     return new Promise(async (resolve, reject) => {
-      let { windowId } = await getActiveTabId();
+      let { windowId } = await getActiveTab();
       chrome.tabs.captureVisibleTab(
         windowId,
         {
@@ -254,8 +244,8 @@
       );
     });
   }
-  
-  function getActiveTabId() {
+
+  function getActiveTab() {
     return new Promise((resolve, reject) => {
       try {
         chrome.tabs.query({ active: true, currentWindow: true }, function (
@@ -263,6 +253,7 @@
         ) {
           resolve({
             tabId: tabs[0].id,
+            url: tabs[0].url,
             windowId: tabs[0].windowId,
           });
         });
@@ -294,7 +285,7 @@
 
     return new Promise(async (resolve, reject) => {
       try {
-        let { tabId } = await getActiveTabId();
+        let { tabId } = await getActiveTab();
         chrome.tabs.executeScript(
           tabId,
           {
