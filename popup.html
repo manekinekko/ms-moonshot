@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        user-select: none;
+      }
+      body {
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 300px;
+        width: 200px;
+        padding: 20px;
+      }
+      #container {
+        display: block;
+        width: 200px;
+        height: 200px;
+        cursor: pointer;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      #container:hover:after {
+        visibility: visible;
+      }
+      #container:after {
+        content: "";
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: url(images/download.png);
+        background-size: 50px;
+        background-repeat: no-repeat;
+        background-position: center;
+        visibility: hidden;
+      }
+
+      p {
+        display: flex;
+        flex-direction: row;
+      }
+
+      input[type="checkbox"] {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+      }
+
+      label {
+        position: relative;
+        width: 210px;
+        cursor: pointer;
+      }
+
+      label:before {
+        content: "";
+        cursor: pointer;
+        width: 60px;
+        min-height: 30px;
+        background: #0078d468;
+        display: block;
+        border-radius: 50px;
+        color: white;
+        float: left;
+        margin-right: 8px;
+        z-index: 0;
+      }
+
+      label:after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 30px;
+        transition: 0.3s;
+        box-shadow: 1px 1px 1px #4f4f4f;
+      }
+
+      input:checked + label:before {
+        background: #0078d4;
+      }
+
+      input:checked + label:after {
+        left: 54px;
+        transform: translateX(-100%);
+      }
+
+      label:active:after {
+        width: 50px;
+      }
+
+      i {
+        color: rgb(150, 150, 150);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <i>(click to download)</i>
+    <p>
+      <input type="checkbox" id="anonymize" /><label for="anonymize"
+        >Hide personal information</label
+      >
+    </p>
+    <br />
+    <a id="open-guidelines" href="#">Read guidelines</a>
+    <script src="popup.js"></script>
+  </body>
+</html>
