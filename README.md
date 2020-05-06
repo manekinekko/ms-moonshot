@@ -1,7 +1,7 @@
 # MoonShot
 
 <p align="center">
-    <img src="images/logo.png"/>
+    <img src="https://github.com/manekinekko/ms-moonshot/blob/master/images/moonshot.png?raw=true"/>
 </p>
 
 ## What is MoonShot?
