@@ -161,13 +161,19 @@
 
       // secrets to hide
       let selectors = [
-        // subscription names and secrets
+        // subscription names 
         `[aria-label="Subscription selector"]`,
         `.fxs-part-assetname`,
         `[aria-labelledby$="siteSubscriptionValue"]`,
 
         // SAS
         `input[title*="&sig="]`,
+        
+        // Storage Access keys
+        `input[aria-label*="Key"]`,
+        
+        // Storage connection string
+        `input[aria-label*="Connection string"]`,
       ];
 
       $$(selectors.join(",")).map((el) => (el.style.filter = cssFilter));
