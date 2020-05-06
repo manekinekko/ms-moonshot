@@ -11,6 +11,11 @@
         "https://review.docs.microsoft.com/help/contribute/contribute-how-to-create-screenshot?branch=master",
     });
   });
+  $("#open-contribute").addEventListener("click", () => {
+    chrome.tabs.create({
+      url: "https://github.com/manekinekko/ms-moonshot",
+    });
+  });
   $("#container").addEventListener("click", async () => {
     let shouldAnonymize = await getSetting("anonymize");
 
@@ -45,6 +50,8 @@
     // sync settings
     let isAnonymizeEnabled = await getSetting("anonymize");
     $("#anonymize").checked = isAnonymizeEnabled;
+
+    makeTextNodesEditable();
   });
 
   window.addEventListener("load", async () => {
@@ -84,7 +91,8 @@
         }
 
         // defer microtask
-        setTimeout(() => resolve(), 10);      } catch (error) {
+        setTimeout(() => resolve(), 10);
+      } catch (error) {
         reject(error);
       }
     });
@@ -193,30 +201,34 @@
         "https://avatars3.githubusercontent.com/u/62345156?s=460&u=885c79b21d3f01e7d2caff6d721aff9c304257c4&v=4";
       let ghUsername = "staticwebdev";
       let $ = (s) => document.querySelector(s) || document.createElement("i");
-      [...document.querySelectorAll(".commit-form-avatar img, a.u-photo img, a.avatar-user > img")].map((el) => {
+      [
+        ...document.querySelectorAll(
+          ".commit-form-avatar img, a.u-photo img, a.avatar-user > img"
+        ),
+      ].map((el) => {
         el.src = avatarSrc;
       });
-      [...document.querySelectorAll("a.author, a.commit-author, a[rel='author']")].map((el) => {
+      [
+        ...document.querySelectorAll(
+          "a.author, a.commit-author, a[rel='author']"
+        ),
+      ].map((el) => {
         el.innerText = ghUsername;
       });
-      [...document.querySelectorAll("#sponsorships-profile-button, .js-profile-editable-area, div.mt-3, div.border-top.py-3.clearfix.hide-sm.hide-md")].map(el => {
+      [
+        ...document.querySelectorAll(
+          "#sponsorships-profile-button, .js-profile-editable-area, div.mt-3, div.border-top.py-3.clearfix.hide-sm.hide-md"
+        ),
+      ].map((el) => {
         el.style.cssText = `display: none !important;`;
       });
       [...document.querySelectorAll("h1.vcard-names")].map((el) => {
-        el.innerHTML = `
-        <span class="p-nickname vcard-username d-block" itemprop="additionalName">`+ghUsername+`</span>`;
+        el.innerHTML =
+          `
+        <span class="p-nickname vcard-username d-block" itemprop="additionalName">` +
+          ghUsername +
+          `</span>`;
       });
-    };
-    return await exec(code);
-  }
-
-  async function flash() {
-    console.log("flash effect");
-
-    let code = function () {
-      let bodyElement = document.body;
-      bodyElement.classList.add("flash");
-      setTimeout(() => bodyElement.classList.remove("flash"), 0);
     };
     return await exec(code);
   }
@@ -261,6 +273,25 @@
         reject(error);
       }
     });
+  }
+
+  async function makeTextNodesEditable() {
+    let code = function () {
+      let n;
+      let nodes = [];
+      let walk = document.createTreeWalker(
+        document.body,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+      while ((n = walk.nextNode())) nodes.push(n);
+      nodes.forEach((el) => {
+        // make all text nodes editable
+        el.parentNode.setAttribute("contenteditable", true);
+      });
+    };
+    return await exec(code);
   }
 
   function xpath(xpathToExecute) {

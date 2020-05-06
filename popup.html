@@ -2,21 +2,48 @@
 <html>
   <head>
     <style>
+      :root {
+        --height: 340px;
+        --width: 300px;
+      }
       body,
       html {
         margin: 0;
         padding: 0;
         user-select: none;
+        font-family: "Lato";
+        width: 348px;
+        transition: opacity 0.2s;
+        color: #323439;
       }
       body {
         background: #fff;
         display: flex;
-        align-items: center;
+        align-items: normal;
         justify-content: center;
         flex-direction: column;
-        height: 300px;
-        width: 200px;
+        height: var(--height);
+        width: var(--width);
         padding: 20px;
+      }
+      a {
+        color: #9a9a9a;
+        text-decoration: none;
+        transition: 0.1s;
+      }
+      a:hover {
+        color: #343434;
+      }
+      .headline {
+        display: flex;
+        margin: 5px;
+      }
+      .headline img {
+        margin-right: 5px;
+      }
+      .headline i {
+        color: #76cdbb;
+        font-style: normal;
       }
       #container {
         display: block;
@@ -26,20 +53,34 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
+        margin: 0 auto;
+        border: 1px solid #eee;
+        position: relative;
+        overflow: hidden;
       }
-      #container:hover:after {
-        visibility: visible;
-      }
-      #container:after {
-        content: "";
+
+      #container span {
         display: block;
-        height: 100%;
-        width: 100%;
-        background: url(images/download.png);
-        background-size: 50px;
-        background-repeat: no-repeat;
-        background-position: center;
-        visibility: hidden;
+        background: #000000a8;
+        padding: 5px;
+        text-align: center;
+        color: white;
+        bottom: -30px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        transition: 0.1s;
+      }
+
+      #container:hover span {
+        bottom: 0;
+      }
+
+      hr {
+        border: 1px solid #eee;
+        width: calc(var(--width) + 40px);
+        left: -20px;
+        position: relative;
       }
 
       p {
@@ -55,20 +96,21 @@
 
       label {
         position: relative;
-        width: 210px;
+        width: 100%;
         cursor: pointer;
+        line-height: 22px;
       }
 
       label:before {
         content: "";
         cursor: pointer;
-        width: 60px;
-        min-height: 30px;
-        background: #0078d468;
+        width: 46px;
+        min-height: 24px;
+        background: #aaa;
         display: block;
         border-radius: 50px;
         color: white;
-        float: left;
+        float: right;
         margin-right: 8px;
         z-index: 0;
       }
@@ -76,10 +118,10 @@
       label:after {
         content: "";
         position: absolute;
-        top: 5px;
-        left: 5px;
-        width: 20px;
-        height: 20px;
+        top: 3px;
+        right: 34px;
+        width: 18px;
+        height: 18px;
         background: #fff;
         border-radius: 30px;
         transition: 0.3s;
@@ -91,29 +133,39 @@
       }
 
       input:checked + label:after {
-        left: 54px;
-        transform: translateX(-100%);
+        right: 10px;
       }
-
-      label:active:after {
-        width: 50px;
-      }
-
       i {
         color: rgb(150, 150, 150);
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
       }
     </style>
   </head>
   <body>
-    <div id="container"></div>
-    <i>(click to download)</i>
+    <h2 class="headline">
+      <img src="images/logo.png" width="25" />
+      <span>Moon<b>Shot</b><i>&nbsp;for Chrome</i></span>
+    </h2>
+    <hr />
+    <div id="container">
+      <span>(click to download)</span>
+    </div>
+
+    <hr />
     <p>
-      <input type="checkbox" id="anonymize" /><label for="anonymize"
-        >Hide personal information</label
-      >
+      <input type="checkbox" id="anonymize" />
+      <label for="anonymize">
+        Hide personal information
+      </label>
     </p>
-    <br />
-    <a id="open-guidelines" href="#">Read guidelines</a>
+    <hr />
+    <footer>
+      <a id="open-guidelines" href="#">Read Guidelines</a>
+      <a id="open-contribute" href="#">Contribute</a>
+    </footer>
     <script src="popup.js"></script>
   </body>
 </html>
