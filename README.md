@@ -4,6 +4,10 @@
     <img src="images/logo.png"/>
 </p>
 
+## What is MoonShot?
+
+MoonShot is a browser extension to capture screenshots in-browser, and hide personal and sensitive information.
+
 ## How to install the extension
 
 1. Clone this repository to your computer.
