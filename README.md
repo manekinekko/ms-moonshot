@@ -1,12 +1,17 @@
-# MoonShot
+<img src="./images/headline.png"/>
 
 <p align="center">
-    <img src="https://github.com/manekinekko/ms-moonshot/blob/master/images/moonshot.png?raw=true"/>
+    <img src="./images/moonshot.png"/>
 </p>
 
 ## What is MoonShot?
 
 MoonShot is a browser extension to capture screenshots in-browser, and hide personal and sensitive information.
+
+Current supported targets are:
+- GitHub (https://github.com/)
+- Microsoft Azure portal (https://ms.portal.azure.com/)
+- Microsoft Docs (https://docs.microsoft.com/) 
 
 ## How to install the extension
 
