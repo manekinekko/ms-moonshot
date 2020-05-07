@@ -161,17 +161,17 @@
 
       // secrets to hide
       let selectors = [
-        // subscription names 
+        // subscription names
         `[aria-label="Subscription selector"]`,
         `.fxs-part-assetname`,
         `[aria-labelledby$="siteSubscriptionValue"]`,
 
         // SAS
         `input[title*="&sig="]`,
-        
+
         // Storage Access keys
         `input[aria-label*="Key"]`,
-        
+
         // Storage connection string
         `input[aria-label*="Connection string"]`,
       ];
@@ -209,7 +209,7 @@
       let $ = (s) => document.querySelector(s) || document.createElement("i");
       [
         ...document.querySelectorAll(
-          ".commit-form-avatar img, a.u-photo img, a.avatar-user > img"
+          ".commit-form-avatar img, a.u-photo img, a.avatar-user > img, .Header-link img"
         ),
       ].map((el) => {
         el.src = avatarSrc;
@@ -223,11 +223,33 @@
       });
       [
         ...document.querySelectorAll(
-          "#sponsorships-profile-button, .js-profile-editable-area, div.mt-3, div.border-top.py-3.clearfix.hide-sm.hide-md"
+          [
+            // the Sponsors dashboard button on the profile page
+            "#sponsorships-profile-button",
+
+            // the Edit profile button on the profile page
+            ".js-profile-editable-area button.js-profile-editable-edit-button",
+            ".js-profile-editable-area .user-profile-bio",
+            ".js-profile-editable-area li[itemprop]:not([itemprop='homeLocation'])",
+
+            // The Organizations section on the profile page
+            "div.border-top.py-3.clearfix.hide-sm.hide-md",
+
+            // sponsors caontainer on the profile page
+            "#js-pjax-container > div > div.h-card.col-lg-3.col-md-4.col-12.float-md-left.pr-md-3.pr-xl-6 > div.mt-3",
+
+            // User's status on the profile page under the avatar
+            ".user-status-container",
+          ].join(",")
         ),
       ].map((el) => {
         el.style.cssText = `display: none !important;`;
       });
+
+      $(
+        ".js-profile-editable-area li[itemprop='homeLocation'] .p-label"
+      ).innerHTML = "The Internet";
+
       [...document.querySelectorAll("h1.vcard-names")].map((el) => {
         el.innerHTML =
           `
@@ -294,7 +316,9 @@
       while ((n = walk.nextNode())) nodes.push(n);
       nodes.forEach((el) => {
         // make all text nodes editable
-        el.parentNode.setAttribute("contenteditable", true);
+        if (el.parentNode.nodeName !== "BODY") {
+          el.parentNode.setAttribute("contenteditable", true);
+        }
       });
     };
     return await exec(code);
