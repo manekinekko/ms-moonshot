@@ -157,7 +157,7 @@
       $(".fxs-avatarmenu-tenant-image").src =
         "https://portal.azure.com/Content/static/MsPortalImpl/AvatarMenu/AvatarMenu_defaultAvatarSmall.png";
 
-      $(".fxs-avatarmenu-username").innerText = "user@contso.com";
+      $(".fxs-avatarmenu-username").innerText = "user@contoso.com";
 
       // secrets to hide
       let selectors = [
