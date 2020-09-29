@@ -91,7 +91,7 @@ export async function hideAzureInfo() {
     $(".fxs-avatarmenu-tenant-image").src =
       "https://portal.azure.com/Content/static/MsPortalImpl/AvatarMenu/AvatarMenu_defaultAvatarSmall.png";
 
-    $(".fxs-avatarmenu-username").innerText = "user@contso.com";
+    $(".fxs-avatarmenu-username").innerText = "user@contoso.com";
 
     // secrets to hide
     let selectors = [
@@ -163,7 +163,7 @@ export async function hideGitHubInfo() {
           ".js-profile-editable-area li[itemprop]:not([itemprop='homeLocation'])",
 
           // The Organizations section on the profile page
-          // sponsors caontainer on the profile page
+          // sponsors container on the profile page
           "div.border-top.pt-3.mt-3.clearfix.hide-sm.hide-md",
 
           // User's status on the profile page under the avatar
