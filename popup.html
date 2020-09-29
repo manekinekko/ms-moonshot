@@ -4,7 +4,7 @@
     <style>
       :root {
         --height: 340px;
-        --width: 260px;
+        --width: 352px;
       }
       /* cyrillic-ext */
       @font-face {
@@ -83,7 +83,7 @@
         margin: 0;
         padding: 0;
         user-select: none;
-        font-family: "Lato";
+        font-family: 'Roboto', sans-serif;
         transition: opacity 0.2s;
         color: #323439;
       }
@@ -96,7 +96,6 @@
         height: var(--height);
         width: var(--width);
         padding: 10px;
-        font-family: 'Roboto', sans-serif;
       }
       a {
         color: #9a9a9a;
@@ -113,7 +112,7 @@
       .headline img {
         margin-right: 5px;
       }
-      .headline i {
+      .headline b {
         color: #76cdbb;
       }
       .headline sup {
@@ -121,7 +120,7 @@
       }
       #container {
         display: block;
-        width: 200px;
+        width: 373px;
         height: 200px;
         cursor: pointer;
         background-position: center;
@@ -130,6 +129,8 @@
         margin: 0 auto;
         position: relative;
         overflow: hidden;
+        left: -10px;
+        top: -6px;
       }
 
       #container span {
@@ -220,7 +221,7 @@
   <body>
     <h2 class="headline">
       <img src="assets/images/logo.png" width="25" />
-      <span>Moon<b>Shot</b><i>&nbsp;for Docs</i> <sup>PREVIEW</sup> </span>
+      <span>Moon<strong>Shot</strong><b>&nbsp;for Docs</b> <sup>PREVIEW</sup> </span>
     </h2>
     <hr />
     <div id="container">

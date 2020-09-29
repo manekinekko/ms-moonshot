@@ -133,18 +133,39 @@ export async function hideGitHubInfo() {
   console.log("hideGitHubInfo");
 
   let code = function () {
-    let avatarSrc =
+    let $ = (s) =>
+      document.querySelector("#MS_MOONSHOT_CONTAINER").querySelector(s) || document.createElement("script");
+    let $$ = (s) =>
+      [...document.querySelector("#MS_MOONSHOT_CONTAINER").querySelectorAll(s)] || document.createElement("script");
+
+    let ghAvatar =
       "https://avatars3.githubusercontent.com/u/62345156?s=460&u=885c79b21d3f01e7d2caff6d721aff9c304257c4&v=4";
     let ghUsername = "staticwebdev";
-    let $ = (s) => document.querySelector("#MS_MOONSHOT_CONTAINER").querySelector(s);
-    let $$ = (s) => [...document.querySelector("#MS_MOONSHOT_CONTAINER").querySelectorAll(s)];
 
-    [...$$(".avatar.avatar-user.width-full, a.u-photo img, a.avatar-user > img, .Header-link img")].map((el) => {
-      el.src = avatarSrc;
+    // set all user's profile avatars with staticwebdev's avatar
+    [
+      ...$$(
+        [
+          ".avatar.avatar-user.width-full",
+          ".avatar.avatar-user",
+          "a.u-photo img",
+          "a.avatar-user > img",
+          ".Header-link > img",
+          "a.author > img",
+          "a.commit-author > img",
+          "a[rel='author'] > img",
+        ].join(",")
+      ),
+    ].map((el) => {
+      el.src = ghAvatar;
     });
+
+    // set all user's github usernames with staticwebdev's username
     [...$$("a.author, a.commit-author, a[rel='author']")].map((el) => {
       el.innerText = ghUsername;
     });
+
+    // hide personal info
     [
       ...$$(
         [
@@ -174,8 +195,10 @@ export async function hideGitHubInfo() {
       el.style.cssText = `display: none !important;`;
     });
 
+    // set user's location
     $(".js-profile-editable-area li[itemprop='homeLocation'] .p-label").innerHTML = "The Internet";
 
+    // set user's github username
     [...$$("h1.vcard-names")].map((el) => {
       el.innerHTML =
         `
