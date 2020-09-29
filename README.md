@@ -1,7 +1,7 @@
-<img src="./images/headline.png"/>
+<img src="./assets/images/headline.png"/>
 
 <p align="center">
-    <img src="./images/moonshot.png"/>
+    <img src="./assets/images/moonshot.png"/>
 </p>
 
 ## What is MoonShot?
