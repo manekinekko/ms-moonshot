@@ -2,17 +2,17 @@
 
 export const $ = (s) => document.querySelector(s);
 
-export function learnify() {
-  console.log("learnify");
+export function anonymize(shouldAnonymize = false) {
+  console.log("anonymize", shouldAnonymize);
 
   return new Promise(async (resolve, reject) => {
     try {
       let { url } = await getActiveTab();
 
       if (url.includes("azure")) {
-        await hideAzureInfo();
+        await anonymizeAzureInfo(shouldAnonymize);
       } else if (url.includes("github")) {
-        await hideGitHubInfo();
+        await anonymizeGitHubInfo();
       }
 
       // defer microtask
@@ -79,19 +79,24 @@ export async function DOMrestore() {
   return await exec(code);
 }
 
-export async function hideAzureInfo() {
-  console.log("hideAzureInfo");
+export async function anonymizeAzureInfo(shouldAnonymize) {
+  console.log("anonymizeAzureInfo", shouldAnonymize);
 
   let code = function () {
-    let cssFilter = "blur(2.5px)";
-    let $ = (s) => document.querySelector("#MS_MOONSHOT_CONTAINER").querySelector(s);
-    let $$ = (s) => [...document.querySelector("#MS_MOONSHOT_CONTAINER").querySelectorAll(s)];
+    let cssFilter = $$shouldAnonymize ? "blur(2.5px)" : "blur(0)";
+    let $ = (s) => document.querySelector(s);
+    let $$ = (s) => [...document.querySelectorAll(s)];
 
     // user info
     $(".fxs-avatarmenu-tenant-image").src =
       "https://portal.azure.com/Content/static/MsPortalImpl/AvatarMenu/AvatarMenu_defaultAvatarSmall.png";
 
     $(".fxs-avatarmenu-username").innerText = "user@contoso.com";
+
+    // subscription ID
+    [...$$(".fxc-essentials-value, .fxc-summary-item-value")]
+      .filter((el) => /\w{8}\-\w{4}\-\w{4}\-\w{4}\-\w{12}/.test(el.textContent))
+      .map((el) => (el.style.filter = cssFilter));
 
     // secrets to hide
     let selectors = [
@@ -119,18 +124,13 @@ export async function hideAzureInfo() {
         ...$$(".fxc-pill-content-value"),
       ].map((el) => (el.style.filter = cssFilter));
     } catch (error) {}
-
-    // subscription ID
-    [...$$(".fxc-essentials-value, .fxc-summary-item-value")]
-      .filter((el) => /\w{8}\-\w{4}\-\w{4}\-\w{4}\-\w{12}/.test(el.textContent))
-      .map((el) => (el.style.filter = cssFilter));
   };
 
-  return await exec(code);
+  return await exec(code, [{ $$shouldAnonymize: shouldAnonymize }]);
 }
 
-export async function hideGitHubInfo() {
-  console.log("hideGitHubInfo");
+export async function anonymizeGitHubInfo() {
+  console.log("anonymizeGitHubInfo");
 
   let code = function () {
     let $ = (s) =>
@@ -275,9 +275,17 @@ export function xpath(xpathToExecute) {
   return result;
 }
 
-export function exec(code) {
+export function exec(code, args = []) {
   code = code.toString();
   code = code.slice(code.indexOf("{") + 1, code.lastIndexOf("}"));
+
+  // substitute placeholder vars ($$) with their values
+  args.forEach((argsObj) => {
+    for (const key in argsObj) {
+      code = code.replaceAll(key, `/*${key}*/${argsObj[key]}`);
+    }
+  });
+
   code = "(function() {" + code + " } ())";
 
   return new Promise(async (resolve, reject) => {

@@ -1,13 +1,14 @@
 import {
-   $,
-   DOMrestore,
-   DOMsave,
-   captureScreenshot,
-   delay,
-   learnify,
-   exec,
-   getSetting
-} from "./popup.utils.js";
+  $,
+  anonymize,
+  captureScreenshot,
+  delay,
+  DOMrestore,
+  DOMsave,
+  exec,
+  getSetting,
+  setSetting,
+} from "./utils.js";
 
 $("#open-guidelines").addEventListener("click", () => {
   chrome.tabs.create({
@@ -24,7 +25,7 @@ $("#container").addEventListener("click", async () => {
 
   if (shouldAnonymize) {
     await DOMsave();
-    await learnify();
+    await anonymize(shouldAnonymize);
     await delay(500);
     await captureScreenshot(true);
     await DOMrestore();
@@ -33,9 +34,11 @@ $("#container").addEventListener("click", async () => {
   }
 });
 $("#anonymize").addEventListener("change", async (event) => {
+  const shouldAnonymize = event.target.checked;
   await setSetting({
-    anonymize: event.target.checked,
+    anonymize: shouldAnonymize,
   });
+  await anonymize(shouldAnonymize);
 });
 
 window.addEventListener("load", async () => {
