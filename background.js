@@ -16,8 +16,10 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
-  if (changeInfo.status == "complete" && tab.active) {
-    const shouldAnonymize = await getSetting("anonymize");
-    await anonymize(shouldAnonymize);
+  if (/(azure|github|microsoft).com/.test(tab.url)) {
+    if (changeInfo.status == "complete" && tab.active) {
+      const shouldAnonymize = await getSetting("anonymize");
+      setTimeout(async (_) => await anonymize(shouldAnonymize), 1000);
+    }
   }
 });
