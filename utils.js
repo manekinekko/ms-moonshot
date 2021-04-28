@@ -93,6 +93,8 @@ export async function anonymizeAzureInfo(shouldAnonymize) {
 
     $(".fxs-avatarmenu-username").innerText = "user@contoso.com";
 
+    $(".fxs-avatarmenu-tenant").innerText = "CONTOSO";
+
     // subscription ID
     [...$$(".fxc-essentials-value, .fxc-summary-item-value")]
       .filter((el) => /\w{8}\-\w{4}\-\w{4}\-\w{4}\-\w{12}/.test(el.textContent))
