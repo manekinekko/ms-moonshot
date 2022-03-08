@@ -9,9 +9,9 @@
 MoonShot is a browser extension to capture screenshots in-browser, and hide personal and sensitive information.
 
 Current supported targets are:
-- GitHub (https://github.com/)
-- Microsoft Azure portal (https://ms.portal.azure.com/?WT.mc_id=javascript-0000-wachegha)
-- Microsoft Docs (https://docs.microsoft.com/?WT.mc_id=javascript-0000-wachegha) 
+- GitHub (https://github.com)
+- Microsoft Azure portal (https://ms.portal.azure.com)
+- Microsoft Docs (https://docs.microsoft.com) 
 
 ## How to install the extension
 
